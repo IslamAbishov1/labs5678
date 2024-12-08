@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Send Email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #003366, #66ccff);
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 50px;
+        }
+        input, textarea, button {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<h2>Send Email</h2>
+<form action="/email" method="post">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <label>To:</label>
+    <input type="email" name="to" placeholder="Enter recipient email" required>
+    <br>
+    <label>Subject:</label>
+    <input type="text" name="subject" placeholder="Enter email subject" required>
+    <br>
+    <label>Message:</label>
+    <textarea name="body" placeholder="Enter your message" required></textarea>
+    <br>
+    <button type="submit">Send</button>
+</form>
+<p th:if="${success}" th:text="${success}"></p>
+<p th:if="${error}" th:text="${error}"></p>
+
+<script>
+    const snowContainer = document.createElement("div");
+    snowContainer.id = "snowflakes";
+    document.body.appendChild(snowContainer);
+
+    setInterval(() => {
+        const snowflake = document.createElement("div");
+        snowflake.className = "snowflake";
+        snowflake.textContent = ".";
+        snowflake.style.left = Math.random() * 100 + "%";
+        snowflake.style.animationDuration = Math.random() * 3 + 2 + "s";
+        snowflake.style.opacity = Math.random();
+        snowContainer.appendChild(snowflake);
+
+        setTimeout(() => snowflake.remove(), 5000);
+    }, 200);
+</script>
+<style>
+    #snowflakes .snowflake {
+        position: absolute;
+        top: -50px;
+        font-size: 20px;
+        color: white;
+        animation: fall linear forwards;
+    }
+    @keyframes fall {
+        to {
+            transform: translateY(100vh);
+            opacity: 0;
+        }
+    }
+</style>
+</body>
+</html>

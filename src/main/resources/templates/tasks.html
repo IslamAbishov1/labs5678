@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Your Tasks</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #002244, #0055cc);
+            font-family: Arial, sans-serif;
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        h2 {
+            margin-top: 60px;
+            font-size: 36px;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .moon {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 80px;
+            height: 80px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #fff;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin-top: 30px;
+            width: 80%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        th, td {
+            border: 1px solid white;
+            padding: 15px;
+            text-align: left;
+            font-size: 18px;
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: bold;
+        }
+
+        td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .links-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .links-container a {
+            margin: 0 15px;
+            font-size: 20px;
+            text-decoration: none;
+            color: white;
+            background: rgba(0,0,0,0.3);
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .links-container a:hover {
+            background: rgba(255,255,255,0.3);
+            color: #ffdd00;
+        }
+
+        #snowflakes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .snowflake {
+            position: absolute;
+            color: white;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-100px); opacity: 1;}
+            100% { transform: translateY(110vh); opacity: 0;}
+        }
+
+        .photo-section {
+            margin-top: 20px;
+        }
+
+        .photo-section img {
+            max-width: 150px;
+            border: 3px solid white;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="moon"></div>
+<h2>Your Tasks</h2>
+
+<div class="photo-section" th:if="${currentUser.photoLink}">
+    <h3>Your Photo:</h3>
+    <img th:src="${currentUser.photoLink}" alt="User Photo">
+</div>
+
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Category</th>
+    </tr>
+    <tr th:each="task : ${tasks}">
+        <td th:text="${task.title}">Title</td>
+        <td th:text="${task.description}">Description</td>
+        <td th:text="${task.category.name}">Category</td>
+    </tr>
+</table>
+
+<div class="links-container">
+    <a href="/tasks/add">Add Task</a>
+    <a href="/photos">Upload Photo</a>
+    <a href="/email">Send Email</a>
+    <a href="/logout">Logout</a>
+</div>
+
+<div id="snowflakes"></div>
+
+<script>
+    const snowContainer = document.getElementById("snowflakes");
+
+    function createSnowflake() {
+        const snowflake = document.createElement("div");
+        snowflake.className = "snowflake";
+        snowflake.textContent = ".";
+        snowflake.style.left = Math.random() * 100 + "vw";
+        snowflake.style.animationDuration = (Math.random() * 5 + 3) + "s";
+        snowflake.style.fontSize = (Math.random() * 10 + 10) + "px";
+        snowflake.style.animationDelay = Math.random() * 3 + "s";
+        snowContainer.appendChild(snowflake);
+
+        setTimeout(() => snowflake.remove(), 8000);
+    }
+
+    setInterval(createSnowflake, 200);
+</script>
+</body>
+</html>
